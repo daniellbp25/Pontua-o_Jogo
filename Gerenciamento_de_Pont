@@ -1,0 +1,69 @@
+historico = []
+bonus = 0.20
+
+
+def exibir_menu():
+    print("=== Main in the game ===")
+    print(" 1 - Inserir Pontuação\n 2 - Mostrar Historico\n 3 - Reniciar Temporada\n 4 - Sair do Jogo ")
+    print("========================\n")
+def pontuacao_partida():
+    try:
+        pontuacao_str = input("digite sua pontuação:")
+        pontuacao_int = int(pontuacao_str)
+        if pontuacao_int > 0:
+            historico.append(pontuacao_int)
+            print(f"Foi marcada a pontuação {pontuacao_int} no historico de partidas")
+        else:
+            print("A pontuação não é valida, digite outra...")
+    except ValueError:
+        print("Erro !!! digite um valor inteiro")
+
+def ver_historico(historico, bonus):
+    contagem = 1
+    total = 0
+
+    if not historico:
+        print("O historico de pontuações está vazio")
+        return
+    
+    print("=== Todas as pontuações abaixo ===\n")
+
+    for pontuacao_int in historico:
+        print(f"Partida{contagem}: {pontuacao_int}\n")
+        contagem = contagem + 1
+        total = total + pontuacao_int
+
+    print(f"\nO total de pontuações foi: {total}")
+
+    pont_total = total
+    minimo = 1000
+
+    if pont_total >= minimo:
+        acresimo = pont_total * bonus
+        total =  acresimo + pont_total
+        print(f"\nA pontuação com bônus foi: {total}")
+    else:
+        print("\nNenhum bônus foi acrescentado, para acrescenta-lo pontue a 1000 ou mais")
+
+def reniciar_temp():
+    historico.clear()
+    print("\n A temporada foi reniciada...")
+    print("E tudo se fez novo...\n")
+
+def main_game():
+    while True:
+        exibir_menu()
+        opcao = input("Qual a sua opção ?\n\n")
+        if opcao == "1":
+            pontuacao_partida()
+        elif opcao == "2":
+            ver_historico(historico, bonus)
+        elif opcao == "3":
+            reniciar_temp()
+        elif opcao == "4":
+            print("Saindo do sistema...")
+            break
+        else:
+            print("Opção invalida...")
+
+main_game()
