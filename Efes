@@ -1,0 +1,37 @@
+'''
+with open ("escreve.txt", 'a', encoding="utf-8") as arquivo:
+    arquivo.write('primeira linha...\n')'''
+'''
+try:
+    with open ('numero.txt','r', encoding='utf-8') as arquivo:
+        texto = arquivo.read()
+        print(texto)
+        print(type(texto))
+except FileNotFoundError:
+    print("O arquivo não existe...")
+'''
+'''
+try:
+    with open ('Efes.py','r', encoding='utf-8') as arquivo:
+        for linhas in arquivo: # o for aqui percorre uma lista, ou seja ele já pula a linha de forma automática
+            print(linhas.strip())
+        print(type(linhas))
+except FileNotFoundError:
+    print("O arquivo não existe...")
+'''
+
+def carregar():
+    while True:
+        dado = input("Digite um numero inteiro: ")
+        if dado > 0:
+            with open('numero.txt','w', encoding='utf-8') as arquivo:
+                arquivo.write(dado)
+                arquivo.write('\n')
+
+try:
+    with open ('Efes.py','r', encoding='utf-8') as arquivo:
+        for linhas in arquivo: # o for aqui percorre uma lista, ou seja ele já pula a linha de forma automática
+            print(linhas.strip())
+        print(type(linhas))
+except FileNotFoundError:
+    print("O arquivo não existe...")

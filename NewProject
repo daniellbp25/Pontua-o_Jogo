@@ -1,0 +1,119 @@
+#Está código vai se tratar de um gerenciador de notas, usando matrix
+MEDIA_APROVACAO = 7.0
+QTD_NOTAS = 3
+NOME_ARQUIVO = "dados_alunos.txt"
+
+def exibir_menu():
+    print("\n--- Sisitema de Notas Escolares ---")
+    print("1. Cadastrar Aluno e Notas")
+    print("2. Listar o Boletim do Aluno")
+    print("3. Salvar os Dados no Arquivo")
+    print("4. Carregar dados do Arquivo")
+    print("5. Sair")
+
+def carregar_dados():
+    lista_alunos_matrix = []          #Aq vai ser a matrix principal do sistema
+    try:
+        with open(NOME_ARQUIVO, "r", encoding="utf-8") as f:
+            for linha in f:
+                linha = linha.strip()
+                if not linha:                                   # o not significa está vazio, ou seja se a linha estiver vazia continue
+                    continue
+                partes = linha.split(";")                       # eu posso escolher o separador
+                nome = partes[0]
+                notas_str = partes[1:]                          # : significa que tenho q ir pro 1 até o final, ou seja do partes1 até o final da lista. :  = até o final, lembrando que vai ter três notas
+
+                notas_float= []
+                for n_str in notas_str:
+                    notas_float.append(float(n_str))
+
+                lista_alunos_matrix.append([nome,notas_float])
+        print(f"dados carregados de {NOME_ARQUIVO} com sucesso.")
+        return lista_alunos_matrix
+    except FileNotFoundError:
+        print(f"O arquivo {NOME_ARQUIVO} não econtrado. Inicializando com lista vazia")
+        return []
+    except Exception as erro:
+        print(f"Erro ao carregar dados {erro}")
+        return []
+
+def salvar_dados(lista_alunos_matrix):
+    try:
+        with open(NOME_ARQUIVO, "w",encoding= "utf-8") as f:
+            for dados_alunos in lista_alunos_matrix:
+                nome = dados_alunos[0]
+                notas = dados_alunos[1]
+
+                notas_str = []
+                linha = f'{nome};{';'.join(notas_str)}\n'
+                f.write(linha)
+        print(f'Dados salvos em {NOME_ARQUIVO} com sucesso.')
+    except Exception as erro:
+        print(f"Erro ao salvas os dados: {erro}")
+
+def calcular_media(notas_vetor):
+    if not notas_vetor:
+        return 0.0
+    total = sum(notas_vetor)
+    return total / len(notas_vetor)
+
+def cadastro_aluno(lista_alunos_matrix):
+    nome = input("Insira o nome do aluno: ")
+    notas_aluno = []
+    for i in range(QTD_NOTAS):
+        while True:
+            try:
+                notas_str = input(f'Digite a nota {i + 1} de {QTD_NOTAS}: ')
+                nota = float(notas_str)
+                notas_aluno.append(notas_str)
+                break
+            except ValueError:
+                print('Valor invalido, digite o valor com base nesse exemplo (ex: 7.5)')
+    lista_alunos_matrix.append([nome,notas_aluno])
+    print(f'Aluno {nome} cadastro com sucesso.')
+
+def exibir_boletim(lista_aluno_matrix):
+    if not lista_aluno_matrix:
+        print("Nenhum Aluno Cadastrado")
+        return
+
+    print(f'\n--- Boletim do Aluno ---')
+    print(f"{'Aluno':<20} | {'Notas':<15} | {'Média:<5'} | {'Situação'}")
+    print("-" * 60)
+
+    for dados_aluno in lista_aluno_matrix:
+        nome = dados_aluno[0]
+        notas = dados_aluno[1]
+
+        media = calcular_media(notas)
+
+        if media >= MEDIA_APROVACAO:
+            situacao = "Aprovado"
+        else:
+            situacao = "Reprovado"
+
+        notas_formatadas = ', '.join([f'{n:.1f}' for n in notas])
+        print(f"{nome<20} | {notas_formatadas} | {media<5} | {situacao}")
+
+def main_notas():
+    lista_alunos = carregar_dados()
+    while True:
+        exibir_menu()
+        opcao = input("Escolha uma opção (1-5): ")
+
+        if opcao == "1":
+            cadastro_aluno(lista_alunos)
+        elif opcao =="2":
+            exibir_boletim(lista_alunos)
+        elif opcao == "3":
+            salvar_dados(lista_alunos)
+        elif opcao == "4":
+            lista_alunos = carregar_dados()
+        elif opcao == "5":
+            print("Saindo do Sistema...")
+            break
+        else:
+            print("Opção invalida...")
+
+
+main_notas()

@@ -1,22 +1,42 @@
 historico = []
 bonus = 0.20
 
+def ler_historico_txt(pontuacao_str):
+    matrix = []
+
+    try:
+        with open("historico.txt", "r",encoding="utf-8") as arquivo:
+            for linha in arquivo:
+
+              arquivo.read(pontuacao_str)
+              print('A pontuação foi marcada no historico...')
+    except FileNotFoundError:
+        with open('historico.txt', 'w', encoding="utf-8") as arquivo:
+            print("O arquivo está sendo criado")
+            pass #ele abre e fecha o arquivo, para criar um arquivo vazio.
+    return matrix        
+
+
 
 def exibir_menu():
     print("=== Main in the game ===")
     print(" 1 - Inserir Pontuação\n 2 - Mostrar Historico\n 3 - Reniciar Temporada\n 4 - Sair do Jogo ")
     print("========================\n")
+
+
 def pontuacao_partida():
     try:
         pontuacao_str = input("digite sua pontuação:")
         pontuacao_int = int(pontuacao_str)
         if pontuacao_int > 0:
             historico.append(pontuacao_int)
+            add_Pontuacao_txt(pontuacao_str)
             print(f"Foi marcada a pontuação {pontuacao_int} no historico de partidas")
         else:
             print("A pontuação não é valida, digite outra...")
     except ValueError:
         print("Erro !!! digite um valor inteiro")
+
 
 def ver_historico(historico, bonus):
     contagem = 1
@@ -45,10 +65,21 @@ def ver_historico(historico, bonus):
     else:
         print("\nNenhum bônus foi acrescentado, para acrescenta-lo pontue a 1000 ou mais")
 
+
 def reniciar_temp():
     historico.clear()
     print("\n A temporada foi reniciada...")
     print("E tudo se fez novo...\n")
+
+
+
+
+def add_Pontuacao(pontuacao_str):
+    try:
+        with open("historico.txt", "a", encoding="utf-8") as arquivo:
+            arquivo.write(pontuacao_str + "\n")
+        print("A Pontuação foi marcada no histórico")
+
 
 def main_game():
     while True:
